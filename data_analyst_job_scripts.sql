@@ -80,8 +80,8 @@ WHERE title ILIKE ('%Analyst%');
 --How many different job titles do not contain either the word ‘Analyst’ or the word ‘Analytics’? What word do these positions have in common?
 SELECT COUNT(title)
 FROM data_analyst_jobs
-WHERE NOT title = ('Analy%');
-			--Every job title has either 'Analyst' or 'Analytics' in the posting. 
+WHERE NOT title LIKE ('%Analy%');
+			--39
 
 --BONUS--
 --You want to understand which jobs requiring SQL are hard to fill.
@@ -90,9 +90,16 @@ WHERE NOT title = ('Analy%');
 	--Order your results so that the domain with the greatest number of `hard to fill` jobs is at the top.
 	--Which three industries are in the top 4 on this list? How many jobs have been listed for more than 3 weeks for each of the top 4?
 	
-SELECT domain, title, skill, days_since_posting 
+SELECT domain, COUNT(title)
 FROM data_analyst_jobs
 WHERE skill LIKE ('%SQL%')
+		AND domain IS NOT NULL
 		AND days_since_posting >21
-ORDER BY domain IS NULL;
+GROUP BY domain
+ORDER BY COUNT(title) DESC
+LIMIT 4;
 
+--Internet and Software 62
+--Banks and Financial Services 61
+--Consulting and Business Services 57
+--Health Care 52
